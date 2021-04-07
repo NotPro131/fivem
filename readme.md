@@ -48,4 +48,5 @@ srv.getResources().then(data => console.log(data)) // Get & log the data!
 - getEnhancedHostSupport - ... - (boolean)
 - getlicenseKeyToken - The license key for the server - (string)
 - getScriptHookAllowed - See if the server supports external mod menus from the client - (boolean)
+- getPlayerCount - Get player count in the server
 
