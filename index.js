@@ -15,10 +15,10 @@ class Server {
 	getPlayers() {
 		return new Promise((send, err) => {
 			axios
-				.get(`http://${this.ip}/players.json`, { timeout: this.options.timeout })
+				.get(`http://${this.ip}/dynamic.json`, { timeout: this.options.timeout })
 				.then(function(body) {
-					let players = body.data;
-					send(players.length);
+					let clients = body.data.clients;
+					send(clients);
 				})
 				.catch(function(error) {
 					err(error);
@@ -92,9 +92,9 @@ class Server {
     getMaxPlayers() {
 		return new Promise((send, err) => {
 			axios
-				.get(`http://${this.ip}/info.json`, { timeout: this.options.timeout })
+				.get(`http://${this.ip}/dynamic.json`, { timeout: this.options.timeout })
 				.then(function(body) {
-					let maxClients = body.data.vars.sv_maxClients;
+					let maxClients = body.data.sv_maxclients;
 					send(maxClients);
 				})
 				.catch(function(error) {
@@ -199,6 +199,20 @@ class Server {
 					err(error);
 				});
 		});
+	}
+	getPlayerCount() {
+		return new Promise((send, err) => {
+			axios
+				.get(`http://${this.ip}/dynamic.json`, { timeout: this.options.timeout })
+				.then(function (body) {
+					const {clients,sv_maxclients} = body.data
+					let playerCount = `${clients}/${sv_maxclients}`;
+					send(playerCount); // if client is 1 and max client 5 it will make an output like this 1/5
+				})
+				.catch(function (error) {
+					err(error);
+				});
+		})
 	}
 }
 
